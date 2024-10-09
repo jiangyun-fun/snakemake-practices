@@ -1,0 +1,39 @@
+from itertools import product
+from datetime import datetime
+import string
+
+now = datetime.now().strftime("%Y%m%d-%H%M%S")
+# Define the range of characters for i (a to y) and j (b to z)
+range_i = string.ascii_lowercase[0:25]  # 'a' to 'y'
+range_j = string.ascii_lowercase[1:26]  # 'b' to 'z'
+
+# Use itertools.product to get all combinations of i and j
+variables = zip(range_i, range_j)
+
+# Iterate over each pair and print them
+# for i, j in variables:
+#     print(i, j)
+#
+
+rule all:
+    input:
+        list(range_j)
+
+for i, j in variables:
+    rule :
+        name: f"{j}"
+        input:
+            f"{i}"
+        output:
+            f"{j}"
+        params:
+            
+        log:
+            f"logs/tmp/{now}.log"
+        benchmark:
+            f"benckmarks/tmp/{now}.tsv"
+        threads: 4
+        shell:
+            """
+echo {input} > {output}
+            """
